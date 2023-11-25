@@ -153,6 +153,48 @@ create_cluster() {
 # Function to create a config file
 create_config() {
     ./kk create config --with-kubernetes "$1" --with-kubesphere "$2"
+    
+    # Function to update values in YAML file
+    update_yaml_values() {
+        local new_ip="$1"
+        local auth_method="$2"
+    
+        sed -i "s/address: 172.16.0.2/address: $new_ip/g" config-sample.yaml
+        sed -i "s/internalAddress: 172.16.0.2/internalAddress: $new_ip/g" config-sample.yaml
+        
+        if [ "$auth_method" == "password" ]; then
+            sed -i 's/privateKeyPath:.*/user: ubuntu, password: "Qcloud@123"/g' config-sample.yaml
+        elif [ "$auth_method" == "SSH" ]; then
+            sed -i 's/user: ubuntu, password: "Qcloud@123"/privateKeyPath: "~\/.ssh\/id_rsa"/g' config-sample.yaml
+        else
+            echo "Invalid authentication method: $auth_method"
+        fi
+    }
+    
+    # Get IP address for node1 from the 'ipaddress' variable
+    node1_ip="$ipaddress"
+    
+    # Ask the user for authentication method
+    echo "Choose authentication method:"
+    echo "1. Password authentication"
+    echo "2. SSH key authentication"
+    read -r choice
+    
+    case $choice in
+        1)
+            auth_method="password"
+            ;;
+        2)
+            auth_method="SSH"
+            ;;
+        *)
+            echo "Invalid choice. Please choose between 1 and 2."
+            exit 1
+            ;;
+    esac
+    
+    # Call the function to update values
+    update_yaml_values "$node1_ip" "$auth_method"
 }
 
 echo "Choose an option:"
@@ -184,46 +226,3 @@ case $choice in
         echo "Invalid option. Please choose 1 or 2."
         ;;
 esac
-
-
-# Function to update values in YAML file
-update_yaml_values() {
-    local new_ip="$1"
-    local auth_method="$2"
-
-    sed -i "s/address: 172.16.0.2/address: $new_ip/g" config-sample.yaml
-    sed -i "s/internalAddress: 172.16.0.2/internalAddress: $new_ip/g" config-sample.yaml
-    
-    if [ "$auth_method" == "password" ]; then
-        sed -i 's/privateKeyPath:.*/user: ubuntu, password: "Qcloud@123"/g' config-sample.yaml
-    elif [ "$auth_method" == "SSH" ]; then
-        sed -i 's/user: ubuntu, password: "Qcloud@123"/privateKeyPath: "~\/.ssh\/id_rsa"/g' config-sample.yaml
-    else
-        echo "Invalid authentication method: $auth_method"
-    fi
-}
-
-# Get IP address for node1 from the 'ipaddress' variable
-node1_ip="$ipaddress"
-
-# Ask the user for authentication method
-echo "Choose authentication method:"
-echo "1. Password authentication"
-echo "2. SSH key authentication"
-read -r choice
-
-case $choice in
-    1)
-        auth_method="password"
-        ;;
-    2)
-        auth_method="SSH"
-        ;;
-    *)
-        echo "Invalid choice. Please choose between 1 and 2."
-        exit 1
-        ;;
-esac
-
-# Call the function to update values
-update_yaml_values "$node1_ip" "$auth_method"
