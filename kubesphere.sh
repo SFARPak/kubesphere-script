@@ -199,7 +199,7 @@ update_yaml_values() {
     elif [ "$auth_method" == "SSH" ]; then
         sed -i 's/user: ubuntu, password: "Qcloud@123"/privateKeyPath: "~\/.ssh\/id_rsa"/g' config-sample.yaml
     else
-        echo "Invalid authentication method."
+        echo "Invalid authentication method: $auth_method"
     fi
 }
 
@@ -220,7 +220,7 @@ case $choice in
         auth_method="SSH"
         ;;
     *)
-        echo "Invalid choice. Exiting..."
+        echo "Invalid choice. Please choose between 1 and 2."
         exit 1
         ;;
 esac
