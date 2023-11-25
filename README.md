@@ -1,4 +1,4 @@
-# This script is created to install the Kubesphere with Kubernetes
+# This script is developed to install the Kubesphere with Kubernetes
 ## Please make sure to Start this repo to appreciate my work. Thanks :)
 
 ## Script Features
