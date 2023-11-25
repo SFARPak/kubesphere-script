@@ -18,9 +18,13 @@
 - Make sure the script is executed using Root user
 
 ### Download the script
+```
 wget https://raw.githubusercontent.com/SFARPak/kubesphere-script/main/kubesphere.sh
+```
 
 ### Execute the script
+```
 sh kubesphere.sh
+```
 
 
