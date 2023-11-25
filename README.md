@@ -10,3 +10,17 @@
 - Download Kubekey
 - Install Kubesphere Dependencies
 - Install Kubernetes and Kubesphere
+
+
+## Getting Started
+## Prerequisits
+- Script is tested on Ubuntu 22, though can support other Linux distro but didin't test yet.
+- Make sure the script is executed using Root user
+
+### Download the script
+wget https://raw.githubusercontent.com/SFARPak/kubesphere-script/main/kubesphere.sh
+
+### Execute the script
+sh kubesphere.sh
+
+
